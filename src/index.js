@@ -9,7 +9,7 @@ const ScriptManager = require('./engine/manager');
 
 // In HA Add-ons, the SUPERVISOR_TOKEN is injected via env.
 const token = process.env.SUPERVISOR_TOKEN || process.env.HA_TOKEN;
-const url = process.env.HA_URL || 'ws://supervisor/core/websocket';
+const url = process.env.HA_URL || 'http://supervisor/core';
 const automationsDir = process.env.AUTOMATIONS_DIR || './automations';
 
 global.WebSocket = ws;
