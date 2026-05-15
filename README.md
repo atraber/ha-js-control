@@ -79,6 +79,28 @@ ha.onTimeout('motion_timeout', () => {
 });
 ```
 
+## Local Development
+
+You can run the engine locally before pushing changes to your live Home Assistant instance. The automations are loaded from the `./automations` directory, which is configured as its own separate git repository.
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment**:
+   Copy `.env.example` to `.env` and enter your Home Assistant URL and a Long-Lived Access Token:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Start the engine**:
+   ```bash
+   npm run dev
+   ```
+
+The script will connect remotely to your HA instance, and you can edit files inside the `./automations` directory and watch them live-reload.
+
 ## Installation (Home Assistant OS Add-on)
 
 Since this runs as an Add-on, you install it via the Home Assistant Add-on Store.

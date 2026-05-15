@@ -1,3 +1,4 @@
+require('dotenv').config();
 const ws = require('ws');
 const {
     createConnection,
@@ -9,7 +10,7 @@ const ScriptManager = require('./engine/manager');
 // In HA Add-ons, the SUPERVISOR_TOKEN is injected via env.
 const token = process.env.SUPERVISOR_TOKEN || process.env.HA_TOKEN;
 const url = process.env.HA_URL || 'ws://supervisor/core/websocket';
-const automationsDir = process.env.AUTOMATIONS_DIR || '/config/js-automations';
+const automationsDir = process.env.AUTOMATIONS_DIR || './automations';
 
 global.WebSocket = ws;
 
