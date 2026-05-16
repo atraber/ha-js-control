@@ -7,6 +7,8 @@ class Sandbox {
         this.listeners = new Map(); // entityId -> Set of callbacks
         this.timeouts = new Map();  // id -> NodeJS.Timeout
         this.intervals = new Map(); // id -> NodeJS.Timeout
+        this.sunsetCallbacks = new Set();
+        this.sunriseCallbacks = new Set();
 
         this.context = this.createContext();
     }
@@ -29,6 +31,28 @@ class Sandbox {
                     this.listeners.set(entityId, new Set());
                 }
                 this.listeners.get(entityId).add(callback);
+            },
+            onTime: (timeStr, weekdays, callback) => {
+                // timeStr format: "HH:MM" or "HH:MM:SS"
+                const [hours, minutes] = timeStr.split(':').map(Number);
+                let lastTriggered = null;
+
+                const timer = setInterval(() => {
+                    const now = new Date();
+                    if (now.getHours() === hours && now.getMinutes() === minutes) {
+                        const todayStr = now.toDateString();
+                        if (lastTriggered !== todayStr) {
+                            if (weekdays && weekdays.length > 0) {
+                                const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+                                const currentDay = days[now.getDay()];
+                                if (!weekdays.includes(currentDay)) return;
+                            }
+                            lastTriggered = todayStr;
+                            callback();
+                        }
+                    }
+                }, 10000); // Check every 10 seconds
+                this.intervals.set(`time_${timeStr}_${Math.random()}`, timer);
             },
             setTimeout: (id, ms, callback) => {
                 this.clearTimeout(id); // Clear existing if any
@@ -64,6 +88,12 @@ class Sandbox {
                     elevation: sunState.attributes.elevation || 0,
                     azimuth: sunState.attributes.azimuth || 0
                 };
+            },
+            onSunset: (callback) => {
+                this.sunsetCallbacks.add(callback);
+            },
+            onSunrise: (callback) => {
+                this.sunriseCallbacks.add(callback);
             },
             fsm: (config) => {
                 return this.manager.createFSMPrimitive(config);
@@ -107,6 +137,22 @@ class Sandbox {
                     }
                 }
             }
+        } else if (type === 'sunset') {
+            for (const callback of this.sunsetCallbacks) {
+                try {
+                    callback();
+                } catch (err) {
+                    console.error(`Error in sunset callback in ${this.filename}:`, err);
+                }
+            }
+        } else if (type === 'sunrise') {
+            for (const callback of this.sunriseCallbacks) {
+                try {
+                    callback();
+                } catch (err) {
+                    console.error(`Error in sunrise callback in ${this.filename}:`, err);
+                }
+            }
         }
     }
 
@@ -120,6 +166,8 @@ class Sandbox {
             clearInterval(timer);
         }
         this.intervals.clear();
+        this.sunsetCallbacks.clear();
+        this.sunriseCallbacks.clear();
     }
 }
 

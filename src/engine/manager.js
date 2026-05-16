@@ -25,6 +25,14 @@ class ScriptManager {
                     old_state: oldState,
                     new_state: newState
                 });
+                
+                if (entityId === 'sun.sun' && oldState && oldState.state !== newState.state) {
+                    if (newState.state === 'below_horizon' && oldState.state === 'above_horizon') {
+                        this.dispatchEvent('sunset', { old_state: oldState, new_state: newState });
+                    } else if (newState.state === 'above_horizon' && oldState.state === 'below_horizon') {
+                        this.dispatchEvent('sunrise', { old_state: oldState, new_state: newState });
+                    }
+                }
             }
         }
     }
