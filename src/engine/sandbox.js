@@ -6,6 +6,7 @@ class Sandbox {
         this.manager = manager;
         this.listeners = new Map(); // entityId -> Set of callbacks
         this.timeouts = new Map();  // id -> NodeJS.Timeout
+        this.intervals = new Map(); // id -> NodeJS.Timeout
 
         this.context = this.createContext();
     }
@@ -42,6 +43,27 @@ class Sandbox {
                     clearTimeout(this.timeouts.get(id));
                     this.timeouts.delete(id);
                 }
+            },
+            setInterval: (id, ms, callback) => {
+                this.clearInterval(id); // Clear existing if any
+                const timer = setInterval(() => {
+                    callback();
+                }, ms);
+                this.intervals.set(id, timer);
+            },
+            clearInterval: (id) => {
+                if (this.intervals.has(id)) {
+                    clearInterval(this.intervals.get(id));
+                    this.intervals.delete(id);
+                }
+            },
+            sun: () => {
+                const sunState = this.manager.getState('sun.sun');
+                if (!sunState || !sunState.attributes) return { elevation: 0, azimuth: 0 };
+                return {
+                    elevation: sunState.attributes.elevation || 0,
+                    azimuth: sunState.attributes.azimuth || 0
+                };
             },
             fsm: (config) => {
                 return this.manager.createFSMPrimitive(config);
@@ -94,6 +116,10 @@ class Sandbox {
             clearTimeout(timer);
         }
         this.timeouts.clear();
+        for (const timer of this.intervals.values()) {
+            clearInterval(timer);
+        }
+        this.intervals.clear();
     }
 }
 
