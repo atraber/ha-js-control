@@ -8,8 +8,8 @@
     "dev": "node src/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Andreas Traber",
+  "license": "MIT",
   "dependencies": {
     "chokidar": "^5.0.0",
     "dotenv": "^17.4.2",

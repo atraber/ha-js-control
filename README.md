@@ -118,3 +118,7 @@ Since this runs as an Add-on, you install it via the Home Assistant Add-on Store
 1. Mount your Home Assistant `/config` folder via Samba or edit via VSCode Add-on.
 2. Create the `js-automations` directory if it doesn't exist.
 3. Add your `.js` files. The add-on will automatically pick them up and execute them immediately.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
