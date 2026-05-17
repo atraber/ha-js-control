@@ -1,8 +1,9 @@
 name: "ha-js-control"
 description: "Write Home Assistant automations dynamically in JavaScript."
-version: "0.0.2"
+version: "0.0.3"
 image: "ghcr.io/atraber/ha-js-control"
 slug: "ha-js-control"
+homeassistant_api: true
 init: false
 arch:
   - amd64
