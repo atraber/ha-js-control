@@ -1,6 +1,6 @@
 {
   "name": "ha-js-control",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "`ha-js-control` is a flexible, dynamic runtime extension for Home Assistant that allows you to write automations using standard JavaScript.",
   "main": "index.js",
   "scripts": {
