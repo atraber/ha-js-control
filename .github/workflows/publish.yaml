@@ -12,7 +12,7 @@ on:
     types: [published]
 
 env:
-  ARCHITECTURES: '["amd64"]'
+  ARCHITECTURES: '["amd64", "aarch64"]'
   IMAGE_NAME: ha-js-control
 
 permissions:
